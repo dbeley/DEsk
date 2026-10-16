@@ -60,6 +60,22 @@ sudo sh scripts/install_arch.sh
 sudo sh scripts/install_fedora.sh
 ```
 
+**NixOS** (and any Nix, with flakes) -- not the shell installer above, a
+flake and a module. Add DEsk's flake as an input, then turn it on in a
+module:
+
+```nix
+# flake.nix
+inputs.desk.url = "github:fyzugx/DEsk";
+
+# configuration.nix (with desk.nixosModules.desk imported)
+programs.desk.enable = true;
+```
+
+[docs/NIXOS.md](docs/NIXOS.md) has the whole example, the options, and
+what the module sets up (wlroots 0.18 is built from source, since nixpkgs
+has dropped it).
+
 Then log out and choose **DEsk** on the login screen.
 
 - It shows what it will install and asks first. `--yes` takes the suggested
@@ -194,6 +210,8 @@ browser, a file manager and a text editor. The drawer's things and
   settings, borrowed programs, sounds, the room, things on the desk.
 - [docs/CONFIGURATION.md](docs/CONFIGURATION.md) -- every setting, file and
   environment variable.
+- [docs/NIXOS.md](docs/NIXOS.md) -- install and use DEsk on NixOS: the flake
+  and the NixOS module.
 - [RELEASE-NOTES.md](RELEASE-NOTES.md) -- what is in v0.1.2 and what is known
   not to work yet.
 - [docs/design.md](docs/design.md) -- the full development log (in Japanese).
@@ -369,6 +387,8 @@ brings everything. To build it yourself:
 - Fonts: the URW base 35 (`fonts-urw-base35`) and Noto CJK
   (`fonts-noto-cjk`); `fonts-klee` for the memo pad.
 - At run time: `grim` for screenshots, `curl` for the weather at the door.
+- On NixOS, the [flake](docs/NIXOS.md) builds all of this for you,
+  wlroots 0.18 included: `nix build github:fyzugx/DEsk`.
 
 ### Minimum and recommended
 
@@ -385,7 +405,7 @@ GPU, about 10 minutes on two cores without one (then it is cached).
 | GPU | none needed (a long first login) | OpenGL ES 3.0 with GBM (Mesa Intel, AMD, Nouveau; VMware's SVGA3D) |
 | screen | 1366x768 | 1440x900 or more |
 | disk | about 1 GB (`--bare`; `--no-apps` adds what Shell Settings opens) | 2-2.7 GB with the whole set |
-| system | Debian 13, Ubuntu 24.04 / 26.04 LTS, Arch Linux, Fedora 43 / 44 | the same |
+| system | Debian 13, Ubuntu 24.04 / 26.04 LTS, Arch Linux, Fedora 43 / 44, NixOS (with flakes) | the same |
 
 ## Build
 
@@ -423,6 +443,8 @@ not, and at the end `desk-settings --check` lists what each row opens (or
 which package would bring it).
 On other distributions, install the requirements and run `scripts/install.sh`.
 Or from a TTY: `desk-session`.
+On NixOS, the flake's module puts DEsk, its PAM service and its portals in
+place ([docs/NIXOS.md](docs/NIXOS.md)).
 
 To update, get the new copy and run the installer again the same
 way ("this updates it", it says): what is installed is replaced, the last build
