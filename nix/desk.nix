@@ -22,6 +22,7 @@
   wayland,
   wayland-protocols,
   cairo,
+  pango,
   fontconfig,
   pixman,
   libdrm,
@@ -38,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "desk";
-  version = "0.1.2";
+  version = "0.1.5";
 
   src = lib.cleanSource ../.;
 
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     cairo
+    pango
     fontconfig
     pixman
     libdrm
